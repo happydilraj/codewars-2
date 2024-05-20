@@ -1,12 +1,14 @@
 import React from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { signOut } from 'firebase/auth'
-import { auth } from './Auth/Firebase'
+import { auth, db } from './Auth/Firebase'
+import { collection, getDocs } from 'firebase/firestore'
 
 
 const Navbar = () => {
     let navigate = useNavigate()
     const location = useLocation()
+    const notesRef = collection(db, "Points");
 
     const handleLogout =  () => {
        signOut(auth).then(()=>{
@@ -14,6 +16,14 @@ const Navbar = () => {
        }).catch((err)=>{
         console.log(err)
        })
+    }
+
+    const handleLeaderboard = async () => {
+      navigate('/Leaderboard')
+      const data = await getDocs(notesRef)
+      data.forEach((note) => {
+        console.log(note.id,note.data())
+      })
     }
 
   return (
@@ -28,8 +38,17 @@ const Navbar = () => {
                 </li>
             </ul>
             {
-              location.pathname==='/Main'?
+              (location.pathname==='/Main' || location.pathname==='/Leaderboard')?
+              <>
+              {
+                location.pathname === '/Leaderboard' ?
+                <button className='btn btn-danger mx-1' onClick={()=> navigate('/Main')}>App</button>
+                :
+                <button className='btn btn-danger mx-1' onClick={()=> handleLeaderboard()}>Leaderboard</button>
+              }
+              
               <button className='btn btn-danger mx-1' onClick={()=> handleLogout()}>Log Out</button>
+              </>
               :
               <>
               <button className='btn btn-danger mx-1' onClick={()=> navigate('/Login')}>Login</button>

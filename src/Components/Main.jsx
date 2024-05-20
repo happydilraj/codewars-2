@@ -27,7 +27,7 @@ const Main = () => {
                 id:doc.id,
             }))
             filteredData.forEach((note) => {
-              if(note.userId === auth?.currentUser?.uid){
+              if(note.user.userId === auth?.currentUser?.uid){
                 setPoints(note.points)
               }
             })
@@ -61,16 +61,20 @@ const Main = () => {
    }))
 
     filteredData.forEach((note) => {
-      if(note.userId === auth?.currentUser?.uid){
+      if(note.user.userId === auth?.currentUser?.uid){
         flag = true;
         toUpdateId = note.id;
       }
     })
 
     if(flag===false){
+      
       await addDoc(pointsRef, {
         points: points + data[prizeNumber].option,
-        userId: auth?.currentUser?.uid,
+        user: {
+          userName: auth?.currentUser?.email,
+          userId: auth?.currentUser?.uid,
+        }
       });
     }
     else{
@@ -89,7 +93,7 @@ const Main = () => {
   return (
     <div >
       <div>
-        <Navbar/>
+        <Navbar />
       </div>
         <div>
             <h1 className='mt-3 text-center text-danger'>Your Points : {points}</h1>

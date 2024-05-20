@@ -7,6 +7,7 @@ import {
   Route,
 } from "react-router-dom";
 import Main from './Components/Main';
+import Leaderboard from './Components/Leaderboard';
 
 
 
@@ -19,6 +20,8 @@ function App() {
           <Route exact path="/Login" element={<Login/>}/>
           <Route exact path="/Signup" element={<Signup/>}/>
           <Route exact path="/Main" element={<Main/>}/>
+          <Route exact path='/Leaderboard' element={<Leaderboard/>}/>
+
         </Routes>
       </Router>
     </div>
